@@ -47,14 +47,14 @@ class GameScene extends Phaser.Scene {
 						card.enableBody(false, 0, 0, true, true);
 						if (this.score <= 0){
 							alert("Game Over");
-							loadpage("../");
+							this.scene.start('MenuScene');
 						}
 					}
 					else{
 						this.correct++;
 						if (this.correct >= 2){
 							alert("You Win with " + this.score + " points.");
-							loadpage("../");
+							this.scene.start('MenuScene');
 						}
 					}
 					this.firstClick = null;
