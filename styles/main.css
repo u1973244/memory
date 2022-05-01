@@ -25,12 +25,14 @@ input[type=number]{
 	height: 75px;
 	font-size: 16px;
 	margin-top: 10px;
+	
 }
 
 button.menu-object{
 	background-color: white;
 	border: none;
 }
+
 
 
 p{
@@ -71,4 +73,9 @@ button.menu-object:hover:not(:active){
 
 .opcions_blanc{
 	color: white;
+}
+
+#items_phaser{
+	text-decoration: none;
+	color:black;
 }
