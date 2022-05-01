@@ -1,3 +1,7 @@
+body{
+	background-color: rgb(93, 197, 197);
+}
+
 input[type=number]{
 	height: 3rem;
     font-size: 1.3rem;
@@ -7,8 +11,10 @@ input[type=number]{
 }
 
 #title{
+	margin-top: 70px;
 	font-size: 26px;
 	line-height: 75px;
+	border: 2px solid white;
 }
 
 .menu-object{
@@ -21,6 +27,12 @@ input[type=number]{
 	margin-top: 10px;
 }
 
+button.menu-object{
+	background-color: white;
+	border: none;
+}
+
+
 p{
 	text-align: center;
 }
@@ -29,11 +41,34 @@ button.menu-object:active{
 	font-size: 18px;
 	width: 275px;
 	height: 70px;
+	background-color: rgb(99, 212, 218);
 }
 
 button.menu-object:hover:not(:active){
 	font-size: 22px;
 	width: 325px;
 	height: 85px;
+	background-color: rgb(188, 240, 243);
 }
 
+#game_area{
+	width: 800px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 150px;
+}
+
+#cartes{
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#tornar_enrere{
+	color: white;
+}
+
+.opcions_blanc{
+	color: white;
+}
