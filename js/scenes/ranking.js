@@ -35,4 +35,4 @@ class RankingScene extends Phaser.Scene {
             }
         }
     }
-}
+}}
