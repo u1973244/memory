@@ -119,7 +119,11 @@ class Game2Scene extends Phaser.Scene {
 									array_imatges.push(imatge);
 								}
 								mostrantse=true;
-								const myTimeout = setTimeout(girar_cartes, 1000); 
+								var temps;
+								if (this.difficulty=="easy") temps=1000;
+								else if (this.difficulty=="normal") temps=700;
+								else temps=500;
+								const myTimeout = setTimeout(girar_cartes, temps); 
 							}
 						}
 						else{
