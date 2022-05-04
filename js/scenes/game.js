@@ -106,12 +106,9 @@ class GameScene extends Phaser.Scene {
 			this.scene.start('MenuScene');
         }, this);
 
-		var girar_cartes = (array_imatges) => {
-			console.log("sisissi")
-			for (let i=0; i<this.num_cards*2; i++){
-				array_imatges[i].destroy()
-			}
-		}
+
+		var array_imatges=[]
+		var mostrantse=false;
 
 		let i = 0;
 		this.cards.children.iterate((card)=>{
@@ -119,43 +116,60 @@ class GameScene extends Phaser.Scene {
 			i++;
 			card.setInteractive();
 			card.on('pointerup', () => {
-				card.disableBody(true,true);
-				if (this.firstClick){
-					if (this.firstClick.card_id !== card.card_id){
-						if (this.difficulty=="easy") this.score -= 10;
-                        else if (this.difficulty=="normal") this.score -= 20;
-						else this.score -= 30;
-						this.firstClick.enableBody(false, 0, 0, true, true);
-						card.enableBody(false, 0, 0, true, true);
+				if (!mostrantse){
+					card.disableBody(true,true);
+					if (this.firstClick){
+						if (this.firstClick.card_id !== card.card_id){
+							if (this.difficulty=="easy") this.score -= 10;
+							else if (this.difficulty=="normal") this.score -= 20;
+							else this.score -= 30;
+							this.firstClick.enableBody(false, 0, 0, true, true);
+							card.enableBody(false, 0, 0, true, true);
 
-						if (this.score <= 0){
-							alert("Game Over");
-							this.scene.start('MenuScene');
+							if (this.score <= 0){
+								alert("Game Over");
+								this.scene.start('MenuScene');
+							}
+							else{
+									
+								for (let i=0; i<this.num_cards*2; i++){
+									if(i<6) var imatge=this.add.image(150+i*100, 200, this.arraycards[i]);
+									else var imatge=this.add.image(150+(i-6)*100, 400, this.arraycards[i]);
+									array_imatges.push(imatge);
+								}
+								mostrantse=true;
+								var temps;
+								if (this.difficulty=="easy") temps=1000;
+								else if (this.difficulty=="normal") temps=700;
+								else temps=500;
+								const myTimeout = setTimeout(girar_cartes, temps); 
+							}
 						}
 						else{
-							var array_imatges=[]
-							for (let i=0; i<this.num_cards*2; i++){
-								if(i<6) var imatge=this.add.image(150+i*100, 200, this.arraycards[i]);
-                                else var imatge=this.add.image(150+(i-6)*100, 400, this.arraycards[i]);
-								array_imatges.push(imatge);
+							this.correct++;
+							if (this.correct >= this.num_cards){
+								alert("You Win with " + this.score + " points.");
+								this.scene.start('MenuScene');
 							}
-							const myTimeout = setTimeout(girar_cartes(array_imatges), 1000); 
 						}
+						this.firstClick = null;
 					}
 					else{
-						this.correct++;
-						if (this.correct >= this.num_cards){
-							alert("You Win with " + this.score + " points.");
-							this.scene.start('MenuScene');
-						}
+						this.firstClick = card;
 					}
-					this.firstClick = null;
-				}
-				else{
-					this.firstClick = card;
 				}
 			}, card);
 		});
+
+		var girar_cartes = () => {
+			console.log("sisissi")
+			for (let i=0; i<this.num_cards*2; i++){
+				array_imatges[i].destroy()
+			}
+			array_imatges=[];
+			mostrantse=false;
+		}
+
 	}
 	
 	update (){	}

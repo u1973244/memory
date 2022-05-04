@@ -60,12 +60,8 @@ class Game2Scene extends Phaser.Scene {
 
 		
 
-		var girar_cartes = (array_imatges) => {
-			console.log("sisissi")
-			for (let i=0; i<this.num_cards*2; i++){
-				array_imatges[i].destroy()
-			}
-		}
+		var array_imatges=[]
+		var mostrantse=false;
 
 		let i = 0;
 		this.cards.children.iterate((card)=>{
@@ -73,77 +69,88 @@ class Game2Scene extends Phaser.Scene {
 			i++;
 			card.setInteractive();
 			card.on('pointerup', () => {
-				card.disableBody(true,true);
-				if (this.firstClick){
-					if (this.firstClick.card_id !== card.card_id){
-                        if (this.difficulty=="easy") this.score -= 10;
-                        else if (this.difficulty=="normal") this.score -= 20;
-						else this.score -= 30;
-						this.firstClick.enableBody(false, 0, 0, true, true);
-						card.enableBody(false, 0, 0, true, true);
+				if (!mostrantse){
+					card.disableBody(true,true);
+					if (this.firstClick){
+						if (this.firstClick.card_id !== card.card_id){
+							if (this.difficulty=="easy") this.score -= 10;
+							else if (this.difficulty=="normal") this.score -= 20;
+							else this.score -= 30;
+							this.firstClick.enableBody(false, 0, 0, true, true);
+							card.enableBody(false, 0, 0, true, true);
 
-						if (this.score <= 0){
-							alert("Game Over, you made " + this.puntuacio + " Pairs");
-                            if(localStorage.ranking){
-                                var arrayRanking = JSON.parse(localStorage.ranking);
-                                if(!Array.isArray(arrayRanking)) arrayRanking = [];
-                                var jugnivell=this.nivell;
-                                var jugpuntuacio=this.puntuacio;
-                                var jugnom=this.username;
-                                var Jugador = {
-                                    nivell:jugnivell,
-                                    puntuacio:jugpuntuacio,
-                                    username:jugnom
-                                };
-                                arrayRanking.push(Jugador);
-                                localStorage.ranking = JSON.stringify(arrayRanking);
+							if (this.score <= 0){
+								alert("Game Over, you made " + this.puntuacio + " Pairs");
+								if(localStorage.ranking){
+									var arrayRanking = JSON.parse(localStorage.ranking);
+									if(!Array.isArray(arrayRanking)) arrayRanking = [];
+									var jugnivell=this.nivell;
+									var jugpuntuacio=this.puntuacio;
+									var jugnom=this.username;
+									var Jugador = {
+										nivell:jugnivell,
+										puntuacio:jugpuntuacio,
+										username:jugnom
+									};
+									arrayRanking.push(Jugador);
+									localStorage.ranking = JSON.stringify(arrayRanking);
 
-                            }
-                            else {
-                                var arrayRanking = [];
-                                var jugnivell=this.nivell;
-                                var jugpuntuacio=this.puntuacio;
-                                var jugnom=this.username;
-                                var Jugador = {
-                                    nivell:jugnivell,
-                                    puntuacio:jugpuntuacio,
-                                    username:jugnom
-                                };
-                                arrayRanking.push(Jugador);
-                                localStorage.ranking = JSON.stringify(arrayRanking);
-                            }
-                            
-						    this.scene.start('MenuScene');
+								}
+								else {
+									var arrayRanking = [];
+									var jugnivell=this.nivell;
+									var jugpuntuacio=this.puntuacio;
+									var jugnom=this.username;
+									var Jugador = {
+										nivell:jugnivell,
+										puntuacio:jugpuntuacio,
+										username:jugnom
+									};
+									arrayRanking.push(Jugador);
+									localStorage.ranking = JSON.stringify(arrayRanking);
+								}
+								
+								this.scene.start('MenuScene');
+							}
+							else{
+								for (let i=0; i<this.num_cards*2; i++){
+									if(i<6) var imatge=this.add.image(150+i*100, 200, this.arraycards[i]);
+									else var imatge=this.add.image(150+(i-6)*100, 400, this.arraycards[i]);
+									array_imatges.push(imatge);
+								}
+								mostrantse=true;
+								const myTimeout = setTimeout(girar_cartes, 1000); 
+							}
 						}
 						else{
-							var array_imatges=[]
-							for (let i=0; i<this.num_cards*2; i++){
-                                if(i<6) var imatge=this.add.image(150+i*100, 200, this.arraycards[i]);
-                                else var imatge=this.add.image(150+(i-6)*100, 400, this.arraycards[i]);
-								array_imatges.push(imatge);
+							this.correct++;
+							this.puntuacio++;
+							if (this.correct >= this.num_cards){
+								this.nivell++;
+								console.log(this.nivell);
+								alert("You won this level! Next level: " + this.nivell + " You made:" + this.puntuacio + " Pairs");
+								sessionStorage.nivell=this.nivell;
+								sessionStorage.puntuacio=this.puntuacio;
+								this.scene.start('Game2Scene');
 							}
-							const myTimeout = setTimeout(girar_cartes(array_imatges), 1000); 
 						}
+						this.firstClick = null;
 					}
 					else{
-						this.correct++;
-                        this.puntuacio++;
-						if (this.correct >= this.num_cards){
-                            this.nivell++;
-                            console.log(this.nivell);
-							alert("You won this level! Next level: " + this.nivell + " You made:" + this.puntuacio + " Pairs");
-                            sessionStorage.nivell=this.nivell;
-                            sessionStorage.puntuacio=this.puntuacio;
-							this.scene.start('Game2Scene');
-						}
+						this.firstClick = card;
 					}
-					this.firstClick = null;
-				}
-				else{
-					this.firstClick = card;
 				}
 			}, card);
 		});
+
+		var girar_cartes = () => {
+			console.log("sisissi")
+			for (let i=0; i<this.num_cards*2; i++){
+				array_imatges[i].destroy()
+			}
+			array_imatges=[];
+			mostrantse=false;
+		}
 	}
 	
 	update (){	}
